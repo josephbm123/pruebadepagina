@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FullPrintTech | Business Pro</title>
+    
+    <link rel="icon" href="imagenes/logo.jpeg" type="image/jpeg">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    
+    <style>
+        :root {
+            --apple-black: #1d1d1f;
+            --apple-white: #ffffff;
+            --apple-gray: #f5f5f7;
+            --accent-blue: #0071e3;
+            --text-secondary: #86868b;
+            --danger: #ff3b30;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: var(--apple-white);
+            color: var(--apple-black);
+            scroll-behavior: smooth;
+        }
+
+        /* --- NAVEGACIÓN --- */
+        nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            height: 55px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 0 10%;
+            box-sizing: border-box;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .logo-container { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .logo-img { height: 38px; border-radius: 6px; }
+        .logo-text { font-weight: 600; font-size: 19px; letter-spacing: -0.5px; }
+        
+        .search-container { background: rgba(0,0,0,0.05); padding: 5px 15px; border-radius: 12px; display: flex; align-items: center; }
+        .search-container input { border: none; background: transparent; outline: none; font-size: 13px; width: 140px; transition: 0.4s; }
+        .search-container input:focus { width: 220px; }
+
+        /* --- MENÚ CATEGORÍAS --- */
+        .category-menu {
+            position: fixed;
+            top: 55px;
+            width: 100%;
+            background: rgba(245, 245, 247, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .cat-item { font-size: 12px; opacity: 0.7; cursor: pointer; transition: 0.2s; text-decoration: none; color: inherit; }
+        .cat-item:hover { opacity: 1; color: var(--accent-blue); }
+        .cat-item.active { font-weight: 600; opacity: 1; border-bottom: 1.5px solid var(--accent-blue); }
+        .cat-contact { color: var(--accent-blue); font-weight: 500; opacity: 1; }
+
+        /* --- LAYOUT --- */
+        .hero { padding-top: 160px; text-align: center; }
+        .hero h1 { font-size: 52px; font-weight: 600; letter-spacing: -1.5px; margin-bottom: 10px; }
+        .hero p { color: var(--text-secondary); font-size: 24px; }
+
+        .main-content {
+            max-width: 1250px;
+            margin: 50px auto;
+            padding: 0 25px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 40px;
+        }
+
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .card { background: var(--apple-gray); border-radius: 24px; padding: 35px; text-align: center; transition: 0.4s; }
+        .card img { width: 100%; height: 200px; object-fit: contain; margin-bottom: 25px; cursor: pointer; }
+        .card h3 { font-size: 21px; margin: 0; }
+        .card .price { color: var(--text-secondary); margin: 10px 0 25px 0; font-size: 17px; font-weight: 500;}
+
+        .btn-select { background: var(--accent-blue); color: white; border: none; padding: 10px 22px; border-radius: 25px; cursor: pointer; font-size: 13px;}
+
+        /* --- CARRITO --- */
+        .cart-panel { background: var(--apple-white); padding: 30px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.08); height: fit-content; position: sticky; top: 140px; }
+        .input-cliente { width: 100%; padding: 14px; background: var(--apple-gray); border: 1px solid #eee; border-radius: 12px; margin-bottom: 25px; outline: none;}
+        
+        .cart-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .total-section { margin-top: 30px; text-align: right; border-top: 1px solid #eee; padding-top: 20px; }
+        .total-section h2 { font-size: 34px; margin: 5px 0 0 0; }
+
+        .btn-action { width: 100%; padding: 18px; border-radius: 14px; border: none; font-weight: 600; margin-top: 12px; cursor: pointer; font-size: 15px;}
+        .btn-whatsapp { background: var(--apple-black); color: white; }
+        .btn-pdf { background: var(--apple-gray); color: var(--apple-black); }
+
+        /* --- FOOTER --- */
+        footer { background: var(--apple-gray); padding: 80px 10%; margin-top: 100px; text-align: center; border-top: 1px solid #eee; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1100px; margin: 0 auto; }
+        .footer-item h4 { font-size: 14px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;}
+        .footer-item p, .footer-item a { font-size: 16px; color: var(--apple-black); text-decoration: none; display: block; margin: 8px 0; font-weight: 500;}
+
+        /* --- MODAL --- */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); backdrop-filter: blur(15px); align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 45px; border-radius: 35px; max-width: 440px; width: 90%; text-align: center; position: relative; }
+
+        @media (max-width: 900px) { .main-content { grid-template-columns: 1fr; } .hero h1 { font-size: 38px; } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo-container" onclick="filtrarCategoria('Todos')">
+        <img src="imagenes/logo.jpeg" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+        <span class="logo-text">FullPrintTech</span>
+    </div>
+    <div class="search-container">
+        <input type="text" id="buscador" placeholder="Buscar..." onkeyup="buscarProducto()">
+    </div>
+</nav>
+
+<div class="category-menu">
+    <span class="cat-item active" onclick="filtrarCategoria('Todos', this)">Todos</span>
+    <span class="cat-item" onclick="filtrarCategoria('iPhone', this)">iPhone</span>
+    <span class="cat-item" onclick="filtrarCategoria('Mac', this)">Mac</span>
+    <span class="cat-item" onclick="filtrarCategoria('GPU', this)">GPU</span>
+    <span class="cat-item" onclick="filtrarCategoria('Toner', this)">Toner</span>
+    <span class="cat-item" onclick="filtrarCategoria('Accesorios', this)">Accesorios</span>
+    <a href="#contacto-seccion" class="cat-item cat-contact">Contacto</a>
+</div>
+
+<header class="hero">
+    <h1 id="cat-title">Tecnología de Vanguardia.</h1>
+    <p>Impulsando tu productividad al siguiente nivel.</p>
+</header>
+
+<div class="main-content">
+    <div class="products-grid" id="products-container"></div>
+
+    <div class="cart-panel">
+        <span style="font-size: 11px; color: var(--text-secondary); font-weight: 700;">COTIZACIÓN #<span id="nro-cotizacion">1001</span></span>
+        <h3>Tu Cotización</h3>
+        <input type="text" id="inputCliente" class="input-cliente" placeholder="Nombre del cliente o empresa">
+        <div id="cart-items"></div>
+        <div id="cart-summary" style="display:none">
+            <div class="total-section">
+                <span>Monto Total</span>
+                <h2><span id="cart-total">0</span> $</h2>
+            </div>
+            <button class="btn-action btn-whatsapp" onclick="enviarWhatsApp()">WhatsApp Directo</button>
+            <button class="btn-action btn-pdf" onclick="generarPDF()">Descargar PDF Pro</button>
+        </div>
+    </div>
+</div>
+
+<footer id="contacto-seccion">
+    <div class="footer-grid">
+        <div class="footer-item">
+            <h4>Ubicación</h4>
+            <p>Caracas, Venezuela</p>
+        </div>
+        <div class="footer-item">
+            <h4>Contacto</h4>
+            <a href="https://wa.me/584242333194">+58 424-2333194</a>
+            <p>soporte@fullprinttech.com</p>
+        </div>
+        <div class="footer-item">
+            <h4>Redes</h4>
+            <a href="#">Instagram</a>
+        </div>
+    </div>
+</footer>
+
+<div id="miModal" class="modal">
+    <div class="modal-content">
+        <span style="position:absolute; top:20px; right:30px; cursor:pointer; font-size:24px; color:#ccc;" onclick="cerrarModal()">✕</span>
+        <img id="modalImg" src="" style="width: 100%; height: 200px; object-fit: contain; transition: 0.3s ease;">
+        <h2 id="modalTitle" style="margin:25px 0 5px 0;"></h2>
+        <p id="modalPriceLabel" style="color: var(--accent-blue); font-weight: 700; font-size: 20px; margin-bottom: 20px;"></p>
+        
+        <select id="selectVariante" onchange="gestionarCambiosModal()" style="width: 100%; padding: 12px; border-radius: 10px; border: none; background: var(--apple-gray); outline: none;"></select>
+        
+        <button class="btn-action btn-whatsapp" id="modalAddBtn" style="margin-top:30px;">Añadir a la lista</button>
+    </div>
+</div>
+
+<script>
+    const productos = [
+        { id: 0, categoria: 'iPhone', name: 'iPhone 17 Pro Max', price: 1199, imgDefault: 'imagenes/iphone17t.png', opciones: ['Naranja cosmico - 256GB', 'Naranja cosmico - 512GB (+$200)', 'Naranja cosmico - 1TB (+$500)', 'Naranja cosmico - 2TB (+$800)', 'Silver - 256GB', 'Silver - 512GB (+$200)', 'Silver - 1TB (+$500)', 'Silver - 2TB (+$800)', 'Azul profundo - 256GB', 'Azul profundo - 512GB (+$200)', 'Azul profundo - 1TB (+$500)', 'Azul profundo - 2TB (+$800)'] },
+        { id: 1, categoria: 'GPU', name: 'RTX 4080 Super', price: 1250, imgDefault: 'imagenes/rtx4080.jpg', opciones: ['ASUS TUF Edition', 'MSI Suprim (+$120)'] },
+        { id: 2, categoria: 'Toner', name: 'Toner HP 85a', price: 65, imgDefault: 'imagenes/toner.jpg', opciones: ['Negro Estándar', 'Pack Ahorro (+$45)'] },
+        { id: 3, categoria: 'Mac', name: 'MacBook Pro M3', price: 1599, imgDefault: 'imagenes/macbook.png', opciones: ['Space Black - 512GB', 'Silver - 1TB (+$600)'] },
+
+        // NUEVO PRODUCTO CON VARIANTES DE CAPACIDAD Y PRECIO
+        { 
+            id: 4, 
+            categoria: 'iPhone', 
+            name: 'iPhone 17', 
+            price: 999, 
+            imgDefault: 'imagenes/iphone17todos.jpg', 
+            opciones: [
+                'Lavanda - 256GB', 
+                'Lavanda - 512GB (+$150)', 
+                'Salvia - 256GB',
+                'Salvia - 512GB (+$150)',
+                'Salvia - 1TB (+$450)',
+                'Azul niebla - 256GB',
+                'Azul niebla - 512GB (+$150)',
+                'Blanco - 256GB',
+                'Blanco - 512GB (+$150)',
+                'Negro - 256GB',
+                'Negro - 512GB (+$150)'
+            ] 
+        },
+
+        // ESPACIOS PARA COMPLETAR (RECUERDA LLENAR NOMBRE Y PRECIO PARA QUE APAREZCAN)
+        { id: 5, categoria: '', name: '', price: 0, imgDefault: '', opciones: ['Estándar'] },
+        { id: 6, categoria: '', name: '', price: 0, imgDefault: '', opciones: ['Estándar'] },
+        { id: 7, categoria: '', name: '', price: 0, imgDefault: '', opciones: ['Estándar'] }
+    ];
+
+    let carrito = JSON.parse(localStorage.getItem('fpt_cart')) || [];
+    let idActual = null;
+
+    window.onload = () => {
+        if (!localStorage.getItem('folio_fpt')) localStorage.setItem('folio_fpt', '1001');
+        document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
+        renderProducts(productos);
+        actualizarCarritoUI();
+    };
+
+    function renderProducts(lista) {
+        const productosActivos = lista.filter(p => p.name !== '');
+        document.getElementById('products-container').innerHTML = productosActivos.map(p => `
+            <div class="card">
+                <img src="${p.imgDefault}" onclick="abrirModal(${p.id})">
+                <h3>${p.name}</h3>
+                <p class="price">${p.price.toLocaleString()} $</p>
+                <button class="btn-select" onclick="abrirModal(${p.id})">Configurar</button>
+            </div>
+        `).join('');
+    }
+
+    // Gestiona tanto la imagen como el precio al cambiar el select
+    function gestionarCambiosModal() {
+        cambiarImagenDinamica();
+        actualizarPrecioModal();
+    }
+
+    function actualizarPrecioModal() {
+        const p = productos.find(x => x.id === idActual);
+        const opt = document.getElementById('selectVariante').value;
+        let finalPrice = p.price;
+        
+        if(opt.includes('+$')) {
+            finalPrice += parseInt(opt.split('+$')[1]);
+        }
+        
+        document.getElementById('modalPriceLabel').innerText = `${finalPrice.toLocaleString()} $`;
+    }
+
+    function cambiarImagenDinamica() {
+        const textoSeleccionado = document.getElementById('selectVariante').value.toLowerCase();
+        const img = document.getElementById('modalImg');
+        const p = productos.find(x => x.id === idActual);
+
+        if (textoSeleccionado.includes('naranja') || textoSeleccionado.includes('black')) {
+            img.src = 'imagenes/iphone17n.jpg'; 
+        } else if (textoSeleccionado.includes('silver')) {
+            img.src = 'imagenes/iphone17.jpg';
+        } else if (textoSeleccionado.includes('azul profundo') || textoSeleccionado.includes('white')) {
+            img.src = 'imagenes/iphone17a.jpg';
+        } else if (textoSeleccionado.includes('lavanda')) {
+            img.src = 'imagenes/iphone17lavanda.webp'; // Asegúrate de tener esta imagen
+        } else if (textoSeleccionado.includes('salvia')) {
+            img.src = 'imagenes/iphone17salvia.webp';
+        } else if (textoSeleccionado.includes('negro')) {
+            img.src = 'imagenes/iphone17negro.webp';
+        } else if (textoSeleccionado.includes('blanco')) {
+            img.src = 'imagenes/iphone17blanco.webp';
+        } else if (textoSeleccionado.includes('azul niebla')) {
+            img.src = 'imagenes/iphone17azulniebla.webp';
+        } else {
+            img.src = p.imgDefault;
+        }
+    }
+
+    function abrirModal(id) {
+        idActual = id;
+        const p = productos.find(x => x.id === id);
+        document.getElementById('modalTitle').innerText = p.name;
+        document.getElementById('modalImg').src = p.imgDefault;
+        document.getElementById('selectVariante').innerHTML = p.opciones.map(o => `<option value="${o}">${o}</option>`).join('');
+        
+        gestionarCambiosModal();
+
+        document.getElementById('modalAddBtn').onclick = () => {
+            const opt = document.getElementById('selectVariante').value;
+            let finalPrice = p.price;
+            if(opt.includes('+$')) finalPrice += parseInt(opt.split('+$')[1]);
+            
+            carrito.push({ nombre: p.name, opcion: opt, subtotal: finalPrice });
+            localStorage.setItem('fpt_cart', JSON.stringify(carrito));
+            actualizarCarritoUI();
+            cerrarModal();
+        };
+        document.getElementById('miModal').style.display = 'flex';
+    }
+
+    function cerrarModal() { document.getElementById('miModal').style.display = 'none'; }
+
+    function filtrarCategoria(cat, element) {
+        document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+        if(element) element.classList.add('active');
+        const filtrados = (cat === 'Todos') ? productos : productos.filter(p => p.categoria === cat);
+        renderProducts(filtrados);
+        document.getElementById('cat-title').innerText = (cat === 'Todos') ? 'Tecnología de Vanguardia.' : cat;
+    }
+
+    function buscarProducto() {
+        const query = document.getElementById('buscador').value.toLowerCase();
+        renderProducts(productos.filter(p => p.name.toLowerCase().includes(query)));
+    }
+
+    function actualizarCarritoUI() {
+        let totalVal = 0;
+        const container = document.getElementById('cart-items');
+        container.innerHTML = carrito.map((item, i) => {
+            totalVal += item.subtotal;
+            return `
+            <div class="cart-item">
+                <div style="font-size:13px">
+                    <strong>${item.nombre}</strong><br>
+                    <small style="color:var(--text-secondary)">${item.opcion}</small><br>
+                    <span onclick="borrarItem(${i})" style="color:red;cursor:pointer;font-size:10px">Quitar</span>
+                </div>
+                <div style="font-weight:600">${item.subtotal.toLocaleString()} $</div>
+            </div>`;
+        }).join('');
+        document.getElementById('cart-total').innerText = totalVal.toLocaleString();
+        document.getElementById('cart-summary').style.display = carrito.length > 0 ? 'block' : 'none';
+    }
+
+    function borrarItem(i) { carrito.splice(i, 1); localStorage.setItem('fpt_cart', JSON.stringify(carrito)); actualizarCarritoUI(); }
+
+    async function generarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const folio = document.getElementById('nro-cotizacion').innerText;
+        const cliente = document.getElementById('inputCliente').value || "Cliente General";
+        const total = document.getElementById('cart-total').innerText;
+
+        doc.setFillColor(0, 113, 227); doc.rect(0, 0, 210, 40, 'F');
+        doc.setFontSize(24); doc.setTextColor(255, 255, 255); doc.setFont("helvetica", "bold");
+        doc.text("FullPrintTech", 20, 25);
+        doc.setFontSize(10); doc.text("COTIZACIÓN PROFESIONAL", 20, 32);
+        
+        doc.setTextColor(29, 29, 31);
+        doc.text(`COTIZACIÓN N°: #${folio}`, 140, 55);
+        doc.roundedRect(20, 50, 100, 25, 3, 3, 'S');
+        doc.setFont("helvetica", "bold"); doc.text("CLIENTE:", 25, 60);
+        doc.setFont("helvetica", "normal"); doc.text(cliente.toUpperCase(), 25, 67);
+
+        const body = carrito.map(item => [item.nombre, item.opcion, "1", `${item.subtotal.toLocaleString()} $`]);
+        doc.autoTable({
+            startY: 85,
+            head: [['PRODUCTO', 'ESPECIFICACIÓN', 'CANT.', 'PRECIO']],
+            body: body,
+            headStyles: { fillColor: [29, 29, 31] },
+            theme: 'striped'
+        });
+
+        let finalY = doc.lastAutoTable.finalY + 20;
+        doc.setFontSize(12); doc.setFont("helvetica", "bold");
+        doc.text("TOTAL ESTIMADO:", 120, finalY);
+        doc.setFontSize(16); doc.setTextColor(0, 113, 227);
+        doc.text(`${total} $`, 190, finalY, { align: 'right' });
+
+        doc.save(`FPT_Cotizacion_${folio}.pdf`);
+        localStorage.setItem('folio_fpt', parseInt(folio) + 1);
+        document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
+    }
+
+    function enviarWhatsApp() {
+        let msg = `🛒 *COTIZACIÓN FullPrintTech*%0ACliente: ${document.getElementById('inputCliente').value}%0A%0A`;
+        carrito.forEach(i => msg += `• ${i.nombre} (${i.opcion}) - ${i.subtotal.toLocaleString()} $%0A`);
+        msg += `%0A*TOTAL: ${document.getElementById('cart-total').innerText} $*`;
+        window.open(`https://wa.me/584242333194?text=${msg}`);
+    }
+
+    window.onclick = (e) => { if(e.target.className === 'modal') cerrarModal(); };
+</script>
+</body>
+</html>
