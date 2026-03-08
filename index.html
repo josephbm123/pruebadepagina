@@ -228,9 +228,9 @@
         },
 
         // ESPACIOS PARA COMPLETAR (RECUERDA LLENAR NOMBRE Y PRECIO PARA QUE APAREZCAN)
-        { id: 5, categoria: '', name: '', price: 0, imgDefault: '', opciones: ['Estándar'] },
-        { id: 6, categoria: '', name: '', price: 0, imgDefault: '', opciones: ['Estándar'] },
-        { id: 7, categoria: '', name: '', price: 0, imgDefault: '', opciones: ['Estándar'] }
+        { id: 5, categoria: 'Accesorios', name: 'Cargador 20W USB-C', price: 60, imgDefault: 'imagenes/cargador20w.jpg', opciones: ['Estandar','Con cable de 1m USB-C (+$40)'] },
+        { id: 6, categoria: 'Accesorios', name: 'Cable USB-C 1m', price: 40, imgDefault: 'imagenes/cable1m.jpg', opciones: ['Estándar', 'Con cargador de 20W USB-C (+$60)'] },
+        { id: 7, categoria: 'Accesorios', name: 'Morral Samsonite', price: 170, imgDefault: 'imagenes/bolsosamsonite.webp', opciones: ['estandar'] }
     ];
 
     let carrito = JSON.parse(localStorage.getItem('fpt_cart')) || [];
@@ -278,7 +278,7 @@
         const img = document.getElementById('modalImg');
         const p = productos.find(x => x.id === idActual);
 
-        if (textoSeleccionado.includes('naranja') || textoSeleccionado.includes('black')) {
+        if (textoSeleccionado.includes('naranja cosmico') || textoSeleccionado.includes('black')) {
             img.src = 'imagenes/iphone17n.jpg'; 
         } else if (textoSeleccionado.includes('silver')) {
             img.src = 'imagenes/iphone17.jpg';
@@ -294,6 +294,10 @@
             img.src = 'imagenes/iphone17blanco.webp';
         } else if (textoSeleccionado.includes('azul niebla')) {
             img.src = 'imagenes/iphone17azulniebla.webp';
+        } else if (textoSeleccionado.includes('con cable de 1m')) {
+            img.src = 'imagenes/cargadorycable.webp';
+        } else if (textoSeleccionado.includes('Con cargador de 20W USB-C')) {
+            img.src = 'imagenes/cargadorycable-copia.webp';
         } else {
             img.src = p.imgDefault;
         }
