@@ -46,7 +46,13 @@
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
-        .logo-container { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .logo-container { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            cursor: pointer; 
+            user-select: none;
+        }
         .logo-img { height: 38px; border-radius: 6px; }
         .logo-text { font-weight: 600; font-size: 19px; letter-spacing: -0.5px; }
         
@@ -54,22 +60,38 @@
         .search-container input { border: none; background: transparent; outline: none; font-size: 13px; width: 140px; transition: 0.4s; }
         .search-container input:focus { width: 220px; }
 
-        /* --- MENÚ CATEGORÍAS --- */
+        /* --- MENÚ CATEGORÍAS (CON SCROLL LATERAL) --- */
         .category-menu {
             position: fixed;
             top: 55px;
             width: 100%;
             background: rgba(245, 245, 247, 0.8);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 999;
             display: flex;
             justify-content: center;
             gap: 35px;
-            padding: 14px 0;
+            padding: 14px 25px;
             border-bottom: 1px solid rgba(0,0,0,0.08);
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
 
-        .cat-item { font-size: 12px; opacity: 0.7; cursor: pointer; transition: 0.2s; text-decoration: none; color: inherit; }
+        .category-menu::-webkit-scrollbar { display: none; }
+
+        .cat-item { 
+            font-size: 12px; 
+            opacity: 0.7; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            text-decoration: none; 
+            color: inherit;
+            flex-shrink: 0;
+        }
+        
         .cat-item:hover { opacity: 1; color: var(--accent-blue); }
         .cat-item.active { font-weight: 600; opacity: 1; border-bottom: 1.5px solid var(--accent-blue); }
         .cat-contact { color: var(--accent-blue); font-weight: 500; opacity: 1; }
@@ -118,13 +140,17 @@
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); backdrop-filter: blur(15px); align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 45px; border-radius: 35px; max-width: 440px; width: 90%; text-align: center; position: relative; }
 
-        @media (max-width: 900px) { .main-content { grid-template-columns: 1fr; } .hero h1 { font-size: 38px; } }
+        @media (max-width: 900px) { 
+            .main-content { grid-template-columns: 1fr; } 
+            .hero h1 { font-size: 38px; } 
+            .category-menu { justify-content: flex-start; }
+        }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo-container" onclick="filtrarCategoria('Todos')">
+    <div class="logo-container" onclick="irAlInicio()">
         <img src="imagenes/logo.jpeg" alt="Logo" class="logo-img" onerror="this.style.display='none'">
         <span class="logo-text">FullPrintTech</span>
     </div>
@@ -133,7 +159,7 @@
     </div>
 </nav>
 
-<div class="category-menu">
+<div class="category-menu" id="menu-categorias">
     <span class="cat-item active" onclick="filtrarCategoria('Todos', this)">Todos</span>
     <span class="cat-item" onclick="filtrarCategoria('iPhone', this)">iPhone</span>
     <span class="cat-item" onclick="filtrarCategoria('Mac', this)">Mac</span>
@@ -191,9 +217,7 @@
         <img id="modalImg" src="" style="width: 100%; height: 200px; object-fit: contain; transition: 0.3s ease;">
         <h2 id="modalTitle" style="margin:25px 0 5px 0;"></h2>
         <p id="modalPriceLabel" style="color: var(--accent-blue); font-weight: 700; font-size: 20px; margin-bottom: 20px;"></p>
-        
         <select id="selectVariante" onchange="gestionarCambiosModal()" style="width: 100%; padding: 12px; border-radius: 10px; border: none; background: var(--apple-gray); outline: none;"></select>
-        
         <button class="btn-action btn-whatsapp" id="modalAddBtn" style="margin-top:30px;">Añadir a la lista</button>
     </div>
 </div>
@@ -204,30 +228,7 @@
         { id: 1, categoria: 'GPU', name: 'RTX 4080 Super', price: 1250, imgDefault: 'imagenes/rtx4080.jpg', opciones: ['ASUS TUF Edition', 'MSI Suprim (+$120)'] },
         { id: 2, categoria: 'Toner', name: 'Toner HP 85a', price: 65, imgDefault: 'imagenes/toner.jpg', opciones: ['Negro Estándar', 'Pack Ahorro (+$45)'] },
         { id: 3, categoria: 'Mac', name: 'MacBook Pro M3', price: 1599, imgDefault: 'imagenes/macbook.png', opciones: ['Space Black - 512GB', 'Silver - 1TB (+$600)'] },
-
-        // NUEVO PRODUCTO CON VARIANTES DE CAPACIDAD Y PRECIO
-        { 
-            id: 4, 
-            categoria: 'iPhone', 
-            name: 'iPhone 17', 
-            price: 999, 
-            imgDefault: 'imagenes/iphone17todos.jpg', 
-            opciones: [
-                'Lavanda - 256GB', 
-                'Lavanda - 512GB (+$150)', 
-                'Salvia - 256GB',
-                'Salvia - 512GB (+$150)',
-                'Salvia - 1TB (+$450)',
-                'Azul niebla - 256GB',
-                'Azul niebla - 512GB (+$150)',
-                'Blanco - 256GB',
-                'Blanco - 512GB (+$150)',
-                'Negro - 256GB',
-                'Negro - 512GB (+$150)'
-            ] 
-        },
-
-        // ESPACIOS PARA COMPLETAR (RECUERDA LLENAR NOMBRE Y PRECIO PARA QUE APAREZCAN)
+        { id: 4, categoria: 'iPhone', name: 'iPhone 17', price: 999, imgDefault: 'imagenes/iphone17todos.jpg', opciones: ['Lavanda - 256GB', 'Lavanda - 512GB (+$150)', 'Salvia - 256GB', 'Salvia - 512GB (+$150)', 'Salvia - 1TB (+$450)', 'Azul niebla - 256GB', 'Azul niebla - 512GB (+$150)', 'Blanco - 256GB', 'Blanco - 512GB (+$150)', 'Negro - 256GB', 'Negro - 512GB (+$150)'] },
         { id: 5, categoria: 'Accesorios', name: 'Cargador 20W USB-C', price: 60, imgDefault: 'imagenes/cargador20w.jpg', opciones: ['Estandar','Con cable de 1m USB-C (+$40)'] },
         { id: 6, categoria: 'Accesorios', name: 'Cable USB-C 1m', price: 40, imgDefault: 'imagenes/cable1m.jpg', opciones: ['Estándar', 'Con cargador de 20W USB-C (+$60)'] },
         { id: 7, categoria: 'Accesorios', name: 'Morral Samsonite', price: 170, imgDefault: 'imagenes/bolsosamsonite.webp', opciones: ['estandar'] }
@@ -243,9 +244,17 @@
         actualizarCarritoUI();
     };
 
+    // Función para regresar al inicio totalmente
+    function irAlInicio() {
+        document.getElementById('buscador').value = ''; // Limpia el buscador
+        const primerTab = document.querySelector('.cat-item');
+        filtrarCategoria('Todos', primerTab); // Filtra por 'Todos'
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Sube al inicio
+    }
+
     function renderProducts(lista) {
-        const productosActivos = lista.filter(p => p.name !== '');
-        document.getElementById('products-container').innerHTML = productosActivos.map(p => `
+        const container = document.getElementById('products-container');
+        container.innerHTML = lista.filter(p => p.name !== '').map(p => `
             <div class="card">
                 <img src="${p.imgDefault}" onclick="abrirModal(${p.id})">
                 <h3>${p.name}</h3>
@@ -255,7 +264,6 @@
         `).join('');
     }
 
-    // Gestiona tanto la imagen como el precio al cambiar el select
     function gestionarCambiosModal() {
         cambiarImagenDinamica();
         actualizarPrecioModal();
@@ -265,11 +273,7 @@
         const p = productos.find(x => x.id === idActual);
         const opt = document.getElementById('selectVariante').value;
         let finalPrice = p.price;
-        
-        if(opt.includes('+$')) {
-            finalPrice += parseInt(opt.split('+$')[1]);
-        }
-        
+        if(opt.includes('+$')) finalPrice += parseInt(opt.split('+$')[1]);
         document.getElementById('modalPriceLabel').innerText = `${finalPrice.toLocaleString()} $`;
     }
 
@@ -277,30 +281,17 @@
         const textoSeleccionado = document.getElementById('selectVariante').value.toLowerCase();
         const img = document.getElementById('modalImg');
         const p = productos.find(x => x.id === idActual);
-
-        if (textoSeleccionado.includes('naranja cosmico') || textoSeleccionado.includes('black')) {
-            img.src = 'imagenes/iphone17n.jpg'; 
-        } else if (textoSeleccionado.includes('silver')) {
-            img.src = 'imagenes/iphone17.jpg';
-        } else if (textoSeleccionado.includes('azul profundo') || textoSeleccionado.includes('white')) {
-            img.src = 'imagenes/iphone17a.jpg';
-        } else if (textoSeleccionado.includes('lavanda')) {
-            img.src = 'imagenes/iphone17lavanda.webp'; // Asegúrate de tener esta imagen
-        } else if (textoSeleccionado.includes('salvia')) {
-            img.src = 'imagenes/iphone17salvia.webp';
-        } else if (textoSeleccionado.includes('negro')) {
-            img.src = 'imagenes/iphone17negro.webp';
-        } else if (textoSeleccionado.includes('blanco')) {
-            img.src = 'imagenes/iphone17blanco.webp';
-        } else if (textoSeleccionado.includes('azul niebla')) {
-            img.src = 'imagenes/iphone17azulniebla.webp';
-        } else if (textoSeleccionado.includes('con cable de 1m')) {
-            img.src = 'imagenes/cargadorycable.webp';
-        } else if (textoSeleccionado.includes('Con cargador de 20W USB-C')) {
-            img.src = 'imagenes/cargadorycable-copia.webp';
-        } else {
-            img.src = p.imgDefault;
-        }
+        if (textoSeleccionado.includes('naranja cosmico') || textoSeleccionado.includes('black')) img.src = 'imagenes/iphone17n.jpg';
+        else if (textoSeleccionado.includes('silver')) img.src = 'imagenes/iphone17.jpg';
+        else if (textoSeleccionado.includes('azul profundo') || textoSeleccionado.includes('white')) img.src = 'imagenes/iphone17a.jpg';
+        else if (textoSeleccionado.includes('lavanda')) img.src = 'imagenes/iphone17lavanda.webp';
+        else if (textoSeleccionado.includes('salvia')) img.src = 'imagenes/iphone17salvia.webp';
+        else if (textoSeleccionado.includes('negro')) img.src = 'imagenes/iphone17negro.webp';
+        else if (textoSeleccionado.includes('blanco')) img.src = 'imagenes/iphone17blanco.webp';
+        else if (textoSeleccionado.includes('azul niebla')) img.src = 'imagenes/iphone17azulniebla.webp';
+        else if (textoSeleccionado.includes('con cable de 1m')) img.src = 'imagenes/cargadorycable.webp';
+        else if (textoSeleccionado.includes('con cargador de 20w usb-c')) img.src = 'imagenes/cargadorycable-copia.webp';
+        else img.src = p.imgDefault;
     }
 
     function abrirModal(id) {
@@ -309,14 +300,11 @@
         document.getElementById('modalTitle').innerText = p.name;
         document.getElementById('modalImg').src = p.imgDefault;
         document.getElementById('selectVariante').innerHTML = p.opciones.map(o => `<option value="${o}">${o}</option>`).join('');
-        
         gestionarCambiosModal();
-
         document.getElementById('modalAddBtn').onclick = () => {
             const opt = document.getElementById('selectVariante').value;
             let finalPrice = p.price;
             if(opt.includes('+$')) finalPrice += parseInt(opt.split('+$')[1]);
-            
             carrito.push({ nombre: p.name, opcion: opt, subtotal: finalPrice });
             localStorage.setItem('fpt_cart', JSON.stringify(carrito));
             actualizarCarritoUI();
@@ -345,8 +333,7 @@
         const container = document.getElementById('cart-items');
         container.innerHTML = carrito.map((item, i) => {
             totalVal += item.subtotal;
-            return `
-            <div class="cart-item">
+            return `<div class="cart-item">
                 <div style="font-size:13px">
                     <strong>${item.nombre}</strong><br>
                     <small style="color:var(--text-secondary)">${item.opcion}</small><br>
@@ -367,33 +354,24 @@
         const folio = document.getElementById('nro-cotizacion').innerText;
         const cliente = document.getElementById('inputCliente').value || "Cliente General";
         const total = document.getElementById('cart-total').innerText;
-
         doc.setFillColor(0, 113, 227); doc.rect(0, 0, 210, 40, 'F');
         doc.setFontSize(24); doc.setTextColor(255, 255, 255); doc.setFont("helvetica", "bold");
         doc.text("FullPrintTech", 20, 25);
         doc.setFontSize(10); doc.text("COTIZACIÓN PROFESIONAL", 20, 32);
-        
         doc.setTextColor(29, 29, 31);
         doc.text(`COTIZACIÓN N°: #${folio}`, 140, 55);
         doc.roundedRect(20, 50, 100, 25, 3, 3, 'S');
         doc.setFont("helvetica", "bold"); doc.text("CLIENTE:", 25, 60);
         doc.setFont("helvetica", "normal"); doc.text(cliente.toUpperCase(), 25, 67);
-
         const body = carrito.map(item => [item.nombre, item.opcion, "1", `${item.subtotal.toLocaleString()} $`]);
         doc.autoTable({
-            startY: 85,
-            head: [['PRODUCTO', 'ESPECIFICACIÓN', 'CANT.', 'PRECIO']],
-            body: body,
-            headStyles: { fillColor: [29, 29, 31] },
-            theme: 'striped'
+            startY: 85, head: [['PRODUCTO', 'ESPECIFICACIÓN', 'CANT.', 'PRECIO']], body: body, headStyles: { fillColor: [29, 29, 31] }, theme: 'striped'
         });
-
         let finalY = doc.lastAutoTable.finalY + 20;
         doc.setFontSize(12); doc.setFont("helvetica", "bold");
         doc.text("TOTAL ESTIMADO:", 120, finalY);
         doc.setFontSize(16); doc.setTextColor(0, 113, 227);
         doc.text(`${total} $`, 190, finalY, { align: 'right' });
-
         doc.save(`FPT_Cotizacion_${folio}.pdf`);
         localStorage.setItem('folio_fpt', parseInt(folio) + 1);
         document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
