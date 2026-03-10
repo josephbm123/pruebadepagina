@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FullPrintTech | Business Pro</title>
+    <title>FullPrintTech</title>
     
     <link rel="icon" href="imagenes/logo.jpeg" type="image/jpeg">
     
@@ -17,6 +17,7 @@
             --apple-gray: #f5f5f7;
             --accent-blue: #0071e3;
             --text-secondary: #86868b;
+            --whatsapp-green: #25D366;
         }
 
         body {
@@ -37,11 +38,8 @@
             justify-content: space-between;
             align-items: center;
             position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 0 10%;
-            box-sizing: border-box;
+            top: 0; width: 100%; z-index: 1000;
+            padding: 0 10%; box-sizing: border-box;
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
@@ -55,17 +53,10 @@
 
         /* --- MENÚ CATEGORÍAS --- */
         .category-menu {
-            position: fixed;
-            top: 55px;
-            width: 100%;
-            background: rgba(245, 245, 247, 0.8);
-            backdrop-filter: blur(20px);
-            z-index: 999;
-            display: flex;
-            justify-content: center;
-            gap: 35px;
-            padding: 14px 25px;
-            border-bottom: 1px solid rgba(0,0,0,0.08);
+            position: fixed; top: 55px; width: 100%;
+            background: rgba(245, 245, 247, 0.8); backdrop-filter: blur(20px);
+            z-index: 999; display: flex; justify-content: center;
+            gap: 35px; padding: 14px 25px; border-bottom: 1px solid rgba(0,0,0,0.08);
             overflow-x: auto;
         }
         .cat-item { font-size: 12px; opacity: 0.7; cursor: pointer; text-decoration: none; color: inherit; white-space: nowrap; transition: 0.2s; }
@@ -76,12 +67,8 @@
         .hero h1 { font-size: 48px; letter-spacing: -1.5px; margin-bottom: 10px; }
         
         .main-content {
-            max-width: 1250px;
-            margin: 40px auto;
-            padding: 0 25px;
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 40px;
+            max-width: 1250px; margin: 40px auto; padding: 0 25px;
+            display: grid; grid-template-columns: 1fr 380px; gap: 40px;
         }
 
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
@@ -92,27 +79,47 @@
         .cart-panel { background: white; padding: 30px; border-radius: 24px; border: 1px solid #eee; height: fit-content; position: sticky; top: 140px; }
         .input-cliente { width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 12px; border: 1px solid #eee; background: var(--apple-gray); outline: none; }
 
+        /* --- BOTONES FLOTANTES --- */
+        .floating-container {
+            position: fixed; bottom: 30px; right: 30px;
+            display: flex; flex-direction: column; gap: 15px; z-index: 5000;
+        }
+        .floating-btn {
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; border: none; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: 0.3s;
+        }
+        .btn-chat-float { background: var(--apple-black); }
+        .btn-wa-float { background: var(--whatsapp-green); }
+
+        #chat-window {
+            display: none; position: fixed; bottom: 110px; right: 30px;
+            width: 320px; height: 400px; background: white;
+            border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 5001; flex-direction: column; overflow: hidden;
+            border: 1px solid #eee;
+        }
+        .chat-header { background: var(--apple-black); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: #f9f9f9; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+        .chat-input-area { padding: 10px; border-top: 1px solid #eee; display: flex; gap: 5px; }
+        .msg { padding: 10px; border-radius: 15px; max-width: 80%; line-height: 1.4; }
+        .msg-bot { background: #e9e9eb; align-self: flex-start; }
+        .msg-user { background: var(--accent-blue); color: white; align-self: flex-end; }
+
         /* --- SECCIÓN CONTACTO --- */
         .contact-section {
-            background: var(--apple-gray);
-            padding: 60px 10%;
-            margin-top: 60px;
-            text-align: center;
-            border-radius: 40px 40px 0 0;
+            background: var(--apple-gray); padding: 60px 10%;
+            margin-top: 60px; text-align: center; border-radius: 40px 40px 0 0;
         }
-        .contact-info-wrapper { display: flex; flex-direction: column; gap: 20px; margin-top: 30px; }
-        .contact-item { font-size: 18px; color: var(--apple-black); }
-        .contact-label { color: var(--text-secondary); font-size: 13px; text-transform: uppercase; display: block; margin-bottom: 5px; }
         .contact-link { text-decoration: none; color: var(--accent-blue); font-weight: 600; }
 
         /* --- MODAL --- */
         .modal { display: none; position: fixed; z-index: 4000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 40px; border-radius: 30px; width: 90%; max-width: 420px; text-align: center; position: relative; }
         .modal-desc { font-size: 14px; color: var(--text-secondary); margin: 8px 0 20px 0; line-height: 1.5; }
-
         .selector-label { display: block; text-align: left; font-size: 13px; font-weight: 600; margin: 15px 0 5px 5px; color: var(--text-secondary); }
-        .modal-select { width: 100%; padding: 12px; border-radius: 12px; background: var(--apple-gray); border: none; outline: none; font-size: 15px; }
-        
+        .modal-select { width: 100%; padding: 12px; border-radius: 12px; background: var(--apple-gray); border: none; outline: none; font-size: 15px; margin-bottom: 10px; }
         .btn-action { width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 600; cursor: pointer; margin-top: 12px; font-size: 15px; }
         .btn-whatsapp { background: var(--apple-black); color: white; }
 
@@ -134,15 +141,41 @@
 <div class="category-menu">
     <span class="cat-item active" onclick="filtrarCategoria('Todos', this)">Todos</span>
     <span class="cat-item" onclick="filtrarCategoria('iPhone', this)">iPhone</span>
-    <span class="cat-item" onclick="filtrarCategoria('Perifericos', this)">Periféricos</span>
+    <span class="cat-item" onclick="filtrarCategoria('Accesorios de iPhone', this)">Accesorios de iPhone</span>
     <span class="cat-item" onclick="filtrarCategoria('PC', this)">PC</span>
+    <span class="cat-item" onclick="filtrarCategoria('Perifericos', this)">Periféricos</span>
+    <span class="cat-item" onclick="filtrarCategoria('Accesorios de Pc', this)">Accesorios de Pc</span>
     <span class="cat-item" onclick="filtrarCategoria('Toner', this)">Toner</span>
+    <span class="cat-item" onclick="filtrarCategoria('PS5', this)">PS5</span>
     <a href="#contacto-seccion" class="cat-item" style="color:var(--accent-blue); font-weight:500;">Contacto</a>
 </div>
 
+<div class="floating-container">
+    <button class="floating-btn btn-chat-float" onclick="toggleChat()">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </button>
+    <a href="https://wa.me/584242333194" target="_blank" class="floating-btn btn-wa-float">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.432 5.631 1.433h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+</div>
+
+<div id="chat-window">
+    <div class="chat-header">
+        <span style="font-weight:600;">Soporte FullPrint</span>
+        <span onclick="toggleChat()" style="cursor:pointer; font-size:20px;">×</span>
+    </div>
+    <div id="chat-msg-container" class="chat-messages">
+        <div class="msg msg-bot">¡Hola! Soy tu asistente. ¿Cómo puedo ayudarte con tu compra?</div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="chat-input-field" style="flex:1; padding:8px; border-radius:10px; border:1px solid #ddd; outline:none;" placeholder="Escribe tu mensaje..." onkeypress="if(event.key==='Enter') responder()">
+        <button onclick="responder()" style="background:var(--accent-blue); color:white; border:none; border-radius:10px; padding:0 12px; cursor:pointer;">↑</button>
+    </div>
+</div>
+
 <header class="hero">
-    <h1>Tecnología de Vanguardia.</h1>
-    <p style="color:var(--text-secondary); font-size:20px;">Tu próxima herramienta profesional está aquí.</p>
+    <h1>FullPrintTech</h1>
+    <p style="color:var(--text-secondary); font-size:20px;">Tu tienda de tecnología de confianza.</p>
 </header>
 
 <div class="main-content">
@@ -165,20 +198,9 @@
 
 <section class="contact-section" id="contacto-seccion">
     <h2>Información de Contacto</h2>
-    <div class="contact-info-wrapper">
-        <div class="contact-item">
-            <span class="contact-label">WhatsApp</span>
-            <a href="https://wa.me/584242333194" target="_blank" class="contact-link">+58 424-2333194</a>
-        </div>
-        <div class="contact-item">
-            <span class="contact-label">Correo Electrónico</span>
-            <span style="font-weight: 500;">contacto@fullprinttech.com</span>
-        </div>
-        <div class="contact-item">
-            <span class="contact-label">Ubicación</span>
-            <span style="font-weight: 500;">Caracas, Venezuela</span>
-        </div>
-    </div>
+    <p>WhatsApp: <a href="https://wa.me/584242333194" target="_blank" class="contact-link">+58 424-2333194</a></p>
+    <p>Correo: contacto@fullprinttech.com</p>
+    <p>Ubicación: Caracas, Venezuela</p>
 </section>
 
 <div id="miModal" class="modal">
@@ -194,57 +216,50 @@
 </div>
 
 <script>
+    // --- LISTA COMPLETA DE PRODUCTOS ---
     const productos = [
-        { 
-            id: 0, categoria: 'iPhone', name: 'iPhone 17 Pro Max', 
-            descripcion: "Titanio de grado aeroespacial y el nuevo chip A19 Pro.",
-            price: 1199, imgDefault: 'imagenes/iphone17t.png', 
-            esIphone: true,
-            capacidades: [{lab:'256GB', extra:0}, {lab:'512GB', extra:200}, {lab:'1TB', extra:400}],
-            colores: ['Naranja Cosmico', 'Silver', 'Azul Profundo']
-        },
-        { 
-            id: 4, categoria: 'iPhone', name: 'iPhone 17', 
-            descripcion: "Potencia y elegancia en nuevos colores vibrantes.",
-            price: 999, imgDefault: 'imagenes/iphone17todos.jpg', 
-            esIphone: true,
-            capacidades: [{lab:'128GB', extra:0}, {lab:'256GB', extra:100}],
-            colores: ['Lavanda', 'Salvia', 'Blanco', 'Azul niebla', 'Negro']
-        },
-        { 
-            id: 1, categoria: 'GPU', name: 'RTX 4080 Super', 
-            descripcion: "Arquitectura Ada Lovelace para un ray tracing inigualable.",
-            price: 1250, imgDefault: 'imagenes/rtx4080.jpg', 
-            opciones: ['ASUS TUF Edition', 'MSI Suprim (+$120)']
-        },
-        { 
-            id: 2, categoria: 'Toner', name: 'Toner HP 85a', 
-            descripcion: "Cartucho original para impresiones láser profesionales.",
-            price: 65, imgDefault: 'imagenes/toner.jpg', 
-            opciones: ['Negro Estándar']
-        },
-        { 
-            id: 3, categoria: 'Perifericos', name: 'Mouse Logitech M550', 
-            descripcion: "Navegación inteligente con scroll de alta precisión.", 
-            price: 60, imgDefault: 'imagenes/mousem550.webp', 
-            opciones: ['Estandar', 'M550 L (+$15)']
-        },
-        { 
-            id: 5, categoria: 'Perifericos', name: 'Teclado Logitech K650', 
-            descripcion: "Teclado inalámbrico con reposamanos integrado.",
-            price: 120, imgDefault: 'imagenes/tecladok650.webp', 
-            opciones: ['Estandar']
-        },
-        { 
-            id: 6, categoria: 'PC', name: 'Laptop Lenovo Slim 3', 
-            descripcion: "Ligera y potente, ideal para estudiantes y oficina.",
-            price: 750, imgDefault: 'imagenes/laptoplenovo.webp', 
-            opciones: ['Estandar']
-        },
+        { id: 0, categoria: 'iPhone', name: 'iPhone 17 Pro Max', descripcion: "Titanio de grado aeroespacial y el nuevo chip A19 Pro.", price: 2190, imgDefault: 'imagenes/iphone17t.png', esIphone: true, capacidades: [{lab:'256GB', extra:0}, {lab:'512GB', extra:300}, {lab:'1TB', extra:600}, {lab:'2TB', extra:1200}], colores: ['Naranja Cosmico', 'Silver', 'Azul Profundo'] },
+        { id: 14, categoria: 'iPhone', name: 'iPhone 17 Pro', descripcion: "Titanio de grado aeroespacial y el nuevo chip A19 Pro.", price: 2085, imgDefault: 'imagenes/iphone17t.png', esIphone: true, capacidades: [{lab:'256GB', extra:0}, {lab:'512GB', extra:214}, {lab:'1TB', extra:600}], colores: ['Naranja Cosmico', 'Silver', 'Azul Profundo'] },
+        { id: 4, categoria: 'iPhone', name: 'iPhone 17', descripcion: "Potencia y elegancia en nuevos colores vibrantes.", price: 1200, imgDefault: 'imagenes/iphone17todos.jpg', esIphone: true, capacidades: [{lab:'128GB', extra:0}, {lab:'256GB', extra:300}], colores: ['Lavanda', 'Salvia', 'Blanco', 'Azul niebla', 'Negro'] },
+        { id: 1, categoria: 'PC', name: 'RTX 4080 Super', descripcion: "Arquitectura Ada Lovelace para un ray tracing inigualable.", price: 1250, imgDefault: 'imagenes/rtx4080.jpg', opciones: ['ASUS TUF Edition', 'MSI Suprim (+$120)'] },
+        { id: 2, categoria: 'Toner', name: 'Toner Canon 067H', descripcion: "Cartucho original de alta capacidad.", price: 65, imgDefault: 'imagenes/toner067hcanon.jpg', esToner: true, colores: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack completo (+$150)'] },
+        { id: 7, categoria: 'Accesorios de Pc', name: 'Mouse Pad', descripcion: "Almohadilla ergonómica con gel.", price: 20, imgDefault: 'imagenes/mousepadnegro.webp', opciones: ['Estándar'] },
+        { id: 8, categoria: 'Accesorios de Pc', name: 'Bolso Samsonite', descripcion: "Protección premium para laptop de 16\".", price: 170, imgDefault: 'imagenes/bolsosamsonite.webp', opciones: ['Estándar'] },
+        { id: 9, categoria: 'Accesorios de iPhone', name: 'Cargador 20W USB-C', descripcion: "Cargador original Apple.", price: 25, imgDefault: 'imagenes/cargador20w.jpg', opciones: ['Solo cubo', 'Con cable 1m (+$20)'] },
+        { id: 3, categoria: 'Perifericos', name: 'Mouse Logitech M550', descripcion: "Navegación inteligente con SmartWheel.", price: 60, imgDefault: 'imagenes/mousem550.webp', opciones: ['Estándar', 'M550 L (+$15)'] },
+        { id: 5, categoria: 'Perifericos', name: 'Teclado Logitech K650', descripcion: "Comodidad para largas jornadas de trabajo.", price: 120, imgDefault: 'imagenes/tecladok650.webp', opciones: ['Estándar'] },
+        { id: 6, categoria: 'PC', name: 'Laptop Lenovo Slim 3', descripcion: "i3 N305, 8GB RAM, 512GB SSD.", price: 750, imgDefault: 'imagenes/laptoplenovo.webp', opciones: ['Estándar'] },
+        { id: 10, categoria: 'Toner', name: 'Toner HP 414x', descripcion: "Alta capacidad para oficinas exigentes.", price: 65, imgDefault: 'imagenes/toner414x.webp', esToner: true, colores: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack completo (+$100)'] },
+        { id: 11, categoria: 'Toner', name: 'Toner Canon 126H', descripcion: "Calidad de impresión profesional.", price: 65, imgDefault: 'imagenes/toner126canon.webp', esToner: true, colores: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack completo (+$500)'] },
+        { id: 12, categoria: 'Accesorios de Pc', name: 'Base Targus laptop', descripcion: "Soporte ergonómico con ventilación.", price: 65, imgDefault: 'imagenes/baselaptoptargus.jpg', opciones: ['Estándar'] },
+        { id: 13, categoria: 'Accesorios de iPhone', name: 'Cable USB-C 1m', descripcion: "Cable de carga rápida de 60W.", price: 65, imgDefault: 'imagenes/cable1m.jpg', opciones: ['Estándar', 'Pack con cargador (+$50)'] },
+        { id: 15, categoria: 'PS5', name: 'PlayStation 5 1-TB', descripcion: "Consola de nueva generación con SSD ultra rápido.", price: 650, imgDefault: 'imagenes/ps5.webp', opciones: ['Estándar'] },
+        { id: 16, categoria: 'PS5', name: 'Control DualSense', descripcion: "Respuesta háptica y gatillos adaptativos.", price: 90, imgDefault: 'imagenes/controlps5.webp', opciones: ['Blanco', 'Negro', 'Rojo'] }
     ];
 
     let carrito = JSON.parse(localStorage.getItem('fpt_cart')) || [];
     let idActual = null;
+
+    // --- FUNCIONES CORE ---
+    function toggleChat() {
+        const win = document.getElementById('chat-window');
+        win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function responder() {
+        const input = document.getElementById('chat-input-field');
+        const box = document.getElementById('chat-msg-container');
+        if (!input.value.trim()) return;
+        box.innerHTML += `<div class="msg msg-user">${input.value}</div>`;
+        const userText = input.value.toLowerCase();
+        input.value = "";
+        let botText = "Gracias por escribir. ¿Deseas consultar el precio de algún equipo?";
+        if (userText.includes("hola")) botText = "¡Hola! Bienvenido a FullPrintTech. ¿Qué buscas hoy?";
+        setTimeout(() => {
+            box.innerHTML += `<div class="msg msg-bot">${botText}</div>`;
+            box.scrollTop = box.scrollHeight;
+        }, 500);
+    }
 
     window.onload = () => {
         if (!localStorage.getItem('folio_fpt')) localStorage.setItem('folio_fpt', '1001');
@@ -258,8 +273,8 @@
             <div class="card">
                 <img src="${p.imgDefault}" onclick="abrirModal(${p.id})">
                 <h3>${p.name}</h3>
-                <p style="color:var(--apple-black); font-weight:600; font-size:18px; margin-bottom:15px;">Desde ${p.price.toLocaleString()} $</p>
-                <button class="btn-action" style="background:var(--accent-blue); color:white; border-radius:20px;" onclick="abrirModal(${p.id})">Configurar</button>
+                <p style="font-weight:600; font-size:18px;">Desde ${p.price.toLocaleString()} $</p>
+                <button class="btn-action" style="background:var(--accent-blue); color:white;" onclick="abrirModal(${p.id})">Configurar</button>
             </div>
         `).join('');
     }
@@ -276,34 +291,39 @@
         if (p.esIphone) {
             container.innerHTML += `<label class="selector-label">CAPACIDAD</label>
                 <select id="selCapacidad" class="modal-select" onchange="gestionarCambiosModal()">
-                    ${p.capacidades.map(c => `<option value="${c.extra}">${c.lab} ${c.extra > 0 ? '(+$'+c.extra+')' : ''}</option>`).join('')}
+                    ${p.capacidades.map(c => `<option value="${c.extra}">${c.lab}</option>`).join('')}
                 </select>
                 <label class="selector-label">COLOR</label>
                 <select id="selColor" class="modal-select" onchange="gestionarCambiosModal()">
                     ${p.colores.map(c => `<option value="${c}">${c}</option>`).join('')}
                 </select>`;
+        } else if (p.esToner) {
+            container.innerHTML += `<label class="selector-label">COLOR / PACK</label>
+                <select id="selOpcion" class="modal-select" onchange="gestionarCambiosModal()">
+                    ${p.colores.map(o => `<option value="${o}">${o.split(' (+$')[0]}</option>`).join('')}
+                </select>`;
         } else {
             container.innerHTML += `<label class="selector-label">VERSIÓN</label>
-                <select id="selEstandar" class="modal-select" onchange="gestionarCambiosModal()">
-                    ${p.opciones.map(o => `<option value="${o}">${o}</option>`).join('')}
+                <select id="selOpcion" class="modal-select" onchange="gestionarCambiosModal()">
+                    ${p.opciones.map(o => `<option value="${o}">${o.split(' (+$')[0]}</option>`).join('')}
                 </select>`;
         }
+        
         gestionarCambiosModal();
         
         document.getElementById('modalAddBtn').onclick = () => {
             let finalPrice = p.price;
-            let seleccionLab = "";
+            let label = "";
             if (p.esIphone) {
-                const capSelect = document.getElementById('selCapacidad');
-                const color = document.getElementById('selColor').value;
-                finalPrice += parseInt(capSelect.value);
-                seleccionLab = `${color} - ${capSelect.options[capSelect.selectedIndex].text}`;
+                const sCap = document.getElementById('selCapacidad');
+                finalPrice += parseInt(sCap.value);
+                label = `${document.getElementById('selColor').value} - ${sCap.options[sCap.selectedIndex].text}`;
             } else {
-                const opt = document.getElementById('selEstandar').value;
-                if(opt.includes('+$')) finalPrice += parseInt(opt.split('+$')[1]);
-                seleccionLab = opt;
+                const sOp = document.getElementById('selOpcion');
+                if(sOp.value.includes('+$')) finalPrice += parseInt(sOp.value.split('+$')[1]);
+                label = sOp.options[sOp.selectedIndex].text;
             }
-            carrito.push({ nombre: p.name, opcion: seleccionLab, subtotal: finalPrice });
+            carrito.push({ nombre: p.name, opcion: label, subtotal: finalPrice });
             localStorage.setItem('fpt_cart', JSON.stringify(carrito));
             actualizarCarritoUI();
             cerrarModal();
@@ -320,17 +340,10 @@
             const color = document.getElementById('selColor').value.toLowerCase();
             if (color.includes('naranja')) img.src = 'imagenes/iphone17n.jpg';
             else if (color.includes('silver')) img.src = 'imagenes/iphone17.jpg';
-            else if (color.includes('azul profundo')) img.src = 'imagenes/iphone17a.jpg';
-            else if (color.includes('salvia')) img.src = 'imagenes/iphone17salvia.webp';
-            else if (color.includes('negro')) img.src = 'imagenes/iphone17negro.webp';
-            else if (color.includes('blanco')) img.src = 'imagenes/iphone17blanco.webp';
-            else if (color.includes('azul niebla')) img.src = 'imagenes/iphone17azulniebla.webp';
-            else if (color.includes('lavanda')) img.src = 'imagenes/iphone17lavanda.webp';
-            else img.src = p.imgDefault;
+            else if (color.includes('azul')) img.src = 'imagenes/iphone17a.jpg';
         } else {
-            const opt = document.getElementById('selEstandar').value.toLowerCase();
-            if(opt.includes('+$')) total += parseInt(opt.split('+$')[1]);
-            img.src = p.imgDefault;
+            const sOp = document.getElementById('selOpcion');
+            if(sOp && sOp.value.includes('+$')) total += parseInt(sOp.value.split('+$')[1]);
         }
         document.getElementById('modalPriceLabel').innerText = `${total.toLocaleString()} $`;
     }
@@ -338,88 +351,113 @@
     function cerrarModal() { document.getElementById('miModal').style.display = 'none'; }
 
     function actualizarCarritoUI() {
-        let totalVal = 0;
+        let t = 0;
         document.getElementById('cart-items').innerHTML = carrito.map((item, i) => {
-            totalVal += item.subtotal;
+            t += item.subtotal;
             return `<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #eee;">
-                <div><b>${item.nombre}</b><br><small style="color:gray">${item.opcion}</small></div>
-                <div style="text-align:right;">${item.subtotal}$ <span onclick="borrarItem(${i})" style="color:red; cursor:pointer; margin-left:8px;">✕</span></div>
+                <div><b>${item.nombre}</b><br><small>${item.opcion}</small></div>
+                <div>${item.subtotal}$ <span onclick="borrarItem(${i})" style="color:red; cursor:pointer; margin-left:8px;">✕</span></div>
             </div>`;
         }).join('');
-        document.getElementById('cart-total').innerText = totalVal.toLocaleString();
+        document.getElementById('cart-total').innerText = t.toLocaleString();
         document.getElementById('cart-summary').style.display = carrito.length > 0 ? 'block' : 'none';
     }
 
-    function borrarItem(i) { 
-        carrito.splice(i, 1); 
-        localStorage.setItem('fpt_cart', JSON.stringify(carrito));
-        actualizarCarritoUI(); 
-    }
+    function borrarItem(i) { carrito.splice(i, 1); localStorage.setItem('fpt_cart', JSON.stringify(carrito)); actualizarCarritoUI(); }
 
     function enviarWhatsApp() {
-        const cliente = document.getElementById('inputCliente').value || "Cliente";
-        let msg = `🛒 *COTIZACIÓN FullPrintTech - ${cliente}*%0A%0A`;
-        carrito.forEach(i => msg += `• ${i.nombre} (${i.opcion}) - ${i.subtotal}$%0A`);
-        msg += `%0A*TOTAL: ${document.getElementById('cart-total').innerText}$*`;
-        window.open(`https://wa.me/584242333194?text=${msg}`);
+        const c = document.getElementById('inputCliente').value || "Cliente";
+        let m = `🛒 *COTIZACIÓN FullPrintTech - ${c}*%0A%0A`;
+        carrito.forEach(i => m += `• ${i.nombre} (${i.opcion}) - ${i.subtotal}$%0A`);
+        m += `%0A*TOTAL: ${document.getElementById('cart-total').innerText}$*`;
+        window.open(`https://wa.me/584242333194?text=${m}`);
     }
 
-    // --- LÓGICA DE PDF RESTAURADA ---
+    // --- FUNCIÓN PDF CON ESPACIO PARA RUTA DE IMAGEN ---
     function generarPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        const cliente = document.getElementById('inputCliente').value || "Valioso Cliente";
         const folio = localStorage.getItem('folio_fpt');
+        const cliente = document.getElementById('inputCliente').value || "Valioso Cliente";
         const fecha = new Date().toLocaleDateString();
 
-        // Estilos de encabezado
-        doc.setFillColor(29, 29, 31); // Apple Black
-        doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(22);
-        doc.text("FullPrintTech", 20, 25);
-        doc.setFontSize(10);
-        doc.text(`COTIZACIÓN PROFORM #FPT-${folio}`, 140, 20);
-        doc.text(`Fecha: ${fecha}`, 140, 27);
+        // ============================================================
+        // 1. ESPACIO PARA TU LOGO (CAMBIA LA RUTA AQUÍ)
+        // ============================================================
+        const rutaDelLogo = "imagenes/logo.jpeg"; 
+        // ============================================================
 
-        // Info Cliente
-        doc.setTextColor(29, 29, 31);
-        doc.setFontSize(12);
-        doc.setFont(undefined, 'bold');
-        doc.text(`PARA: ${cliente.toUpperCase()}`, 20, 55);
-        
-        // Tabla de Productos
-        doc.autoTable({
-            startY: 65,
-            head: [['PRODUCTO', 'ESPECIFICACIÓN', 'SUBTOTAL']],
-            body: carrito.map(i => [i.nombre, i.opcion, `${i.subtotal.toLocaleString()} $`]),
-            headStyles: { fillColor: [0, 113, 227], textColor: 255 }, // Accent Blue
-            styles: { fontSize: 10, cellPadding: 5 },
-            columnStyles: { 2: { halign: 'right', fontStyle: 'bold' } }
-        });
+        const img = new Image();
+        img.src = rutaDelLogo;
 
-        // Total
-        const finalY = doc.lastAutoTable.finalY + 15;
-        doc.setFontSize(16);
-        doc.text(`TOTAL A PAGAR: ${document.getElementById('cart-total').innerText} $`, 120, finalY);
+        img.onload = function() {
+            try {
+                // Posición x: 15, y: 12, ancho: 35, alto: 22
+                doc.addImage(img, 'JPEG', 15, 12, 35, 22); 
+            } catch (e) {
+                console.warn("Ruta de imagen no encontrada. Mostrando respaldo.");
+                doc.setDrawColor(240);
+                doc.rect(15, 12, 35, 22);
+            }
 
-        // Pie de página
-        doc.setFontSize(9);
-        doc.setTextColor(150);
-        doc.text("Esta cotización tiene una validez de 48 horas.", 20, finalY + 20);
-        doc.text("Gracias por elegir FullPrintTech.", 20, finalY + 25);
+            // Datos empresa (Derecha)
+            doc.setFontSize(22);
+            doc.setTextColor(29, 29, 31);
+            doc.setFont("helvetica", "bold");
+            doc.text("FullPrintTech", 135, 22);
+            
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(100);
+            doc.text("Caracas, Venezuela", 135, 28);
+            doc.text("WhatsApp: +58 424-2333194", 135, 33);
+            doc.text("contacto@fullprinttech.com", 135, 38);
 
-        // Guardar y aumentar folio
-        doc.save(`Cotizacion_FPT_${folio}.pdf`);
-        localStorage.setItem('folio_fpt', parseInt(folio) + 1);
-        document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
+            // Línea divisoria
+            doc.setDrawColor(0, 113, 227);
+            doc.setLineWidth(0.8);
+            doc.line(15, 48, 195, 48);
+
+            // Datos Cliente
+            doc.setFontSize(10);
+            doc.setTextColor(29, 29, 31);
+            doc.setFont("helvetica", "bold");
+            doc.text("COTIZACIÓN PARA:", 15, 58);
+            doc.setFont("helvetica", "normal");
+            doc.text(cliente.toUpperCase(), 15, 64);
+            
+            doc.setFont("helvetica", "bold");
+            doc.text("No. Cotización:", 135, 58);
+            doc.text("Fecha:", 135, 64);
+            doc.setFont("helvetica", "normal");
+            doc.text("#" + folio, 170, 58);
+            doc.text(fecha, 170, 64);
+
+            // Tabla
+            doc.autoTable({
+                startY: 75,
+                head: [['PRODUCTO', 'CONFIGURACIÓN', 'SUBTOTAL']],
+                body: carrito.map(i => [i.nombre, i.opcion, `${i.subtotal.toLocaleString()} $`]),
+                headStyles: { fillColor: [29, 29, 31] },
+                alternateRowStyles: { fillColor: [245, 245, 247] },
+                margin: { left: 15, right: 15 }
+            });
+
+            // Total
+            const finalY = doc.lastAutoTable.finalY + 15;
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text(`TOTAL A PAGAR:  ${document.getElementById('cart-total').innerText} $`, 120, finalY);
+
+            doc.save(`Cotizacion_FPT_${folio}.pdf`);
+            localStorage.setItem('folio_fpt', parseInt(folio) + 1);
+            document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
+        };
+
+        img.onerror = function() { img.onload(); };
     }
 
-    function irAlInicio() {
-        document.getElementById('buscador').value = '';
-        filtrarCategoria('Todos', document.querySelector('.cat-item'));
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    function irAlInicio() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
     function filtrarCategoria(cat, element) {
         document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
@@ -428,8 +466,8 @@
     }
 
     function buscarProducto() {
-        const query = document.getElementById('buscador').value.toLowerCase();
-        renderProducts(productos.filter(p => p.name.toLowerCase().includes(query)));
+        const q = document.getElementById('buscador').value.toLowerCase();
+        renderProducts(productos.filter(p => p.name.toLowerCase().includes(q)));
     }
 </script>
 </body>
